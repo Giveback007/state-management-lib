@@ -7,18 +7,32 @@ export const objVals = <T = any>(obj: { [key: string]: T }): T[] => objKeys(obj)
 /** A promise that waits n amount of milliseconds to execute */
 export const wait = (ms: number) => new Promise(res => setTimeout(() => res(), ms));
 
-/** Iterates n times over a function */
+/** Iterates n times with a function */
 export const iterate = (num: number) => ({
     for: (funct: (i: number) => any) => {
-        for (let i = 0; i < num; i++) { funct(i) };
+        for (let i = 0; i < num; i++) funct(i);
     },
     /** Generate an array with the return values of funct */
     map: <T>(funct: (i: number) => T) => {
         const arr: T[] = [];
-        for (let i = 0; i < num; i++) { arr.push(funct(i)) };
+        for (let i = 0; i < num; i++) arr.push(funct(i));
         return arr;
     }
 });
+
+// /** recursively goes over all nested values in an object and array */
+// export const recurse = (obj: {} | any[]) => ({
+//     for: (funct: (key: string) => any) => {
+//         for (let val of (obj as any)) {
+//             funct(val);
+//             if (isObjOrArr(val))
+//                 recurse(val).for(funct)
+//         }
+//     }
+// })
+
+/** Fast check for {} || [] types */
+export const isObjOrArr = (val: any) => val && typeof val === 'object';
 
 /** An improved version of native `typeof` */
 export function getType(val: any): JsType {

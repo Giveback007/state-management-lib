@@ -1,4 +1,4 @@
-import { typeOf, wait, iterate } from "./general.util";
+import { typeOf, wait, iterate, isObjOrArr } from "./general.util";
 import { anyObj, dictionary } from "./general.types";
 
 class StateObject<T extends ({}| any[])> {
@@ -39,7 +39,6 @@ class StateObject<T extends ({}| any[])> {
                 this.functs[i](this._state);
                 this.emitIndex = i;
             });
-            // console.log('stuff')
         } while (this.lastIndexNeedUpdate !== -1)
 
         this.emitIndex = -1;
@@ -52,21 +51,25 @@ class StateObject<T extends ({}| any[])> {
 // Test setting, mutating and deleting of nested values
 const stateObjHandler = <T extends ({} | any[])>(stateObj: StateObject<T>): ProxyHandler<any> => 
 ({
+    get: (target, key) => {
+        if (key === '__isStateObject') return true;
+        return Reflect.get(target, key)
+    },
     set: (target, key, value) => {
         // Recursive proxy handler
-        if ((typeOf((value), 'array') || typeOf(value, 'object')) && !value.__isStateObject) {
+        if (isObjOrArr(value) && !value.__isStateObject) {
             value = new Proxy(value, stateObjHandler(stateObj));
             Object.keys(value).forEach((key) => value[key] = value[key]);
+            for (let key in value) value[key] = value[key];
         }
-
-        target[key] = value;
-        (stateObj as any).startEmit();
-        return true
-    },
-    deleteProperty: (target, key) => {
-        delete target[key];
+        
+        Reflect.set(target, key, value);
         (stateObj as any).startEmit();
         return true;
+    },
+    deleteProperty: (target, key) => {
+        (stateObj as any).startEmit();
+        return Reflect.deleteProperty(target, key);
     },
 })
 
@@ -76,7 +79,8 @@ export function makeStateObject<T extends anyObj>(obj: T): StateObject<T> {
 
     const s = new StateObject<T>();
     (s as any)._state = new Proxy(obj, stateObjHandler(s));
-    
+
+    // Reassigning causes the proxy set to fire, resulting in recursion
     for (let key in s.state) s.state[key] = s.state[key];
 
     return s;

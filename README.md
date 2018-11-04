@@ -1,4 +1,5 @@
-Creates an object that fires of the subscriptions on any changes made to the object.
+A simple state management library. Its as easy as assigning a value to the object, even deeply nested properties.
+Creates an object that fires off the subscriptions on any changes made to the object.
 
 obj.state.addAProp = {}; // This will trigger
 
