@@ -1,0 +1,31 @@
+{
+  "name": "@giveback007/proxy-state",
+  "version": "0.1.1",
+  "description": "Easy state management for small applications using JS proxies",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "files": [
+    "/dist",
+    "/src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Giveback007/state-management-lib.git"
+  },
+  "keywords": [],
+  "author": "Dovydas Stirpeika <dovy91@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Giveback007/state-management-lib/issues"
+  },
+  "homepage": "https://github.com/Giveback007/state-management-lib#readme",
+  "dependencies": {
+    "@giveback007/util-lib": "^0.1.4"
+  },
+  "devDependencies": {
+    "typescript": "^3.1.6"
+  }
+}
