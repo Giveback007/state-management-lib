@@ -1,1 +1,1 @@
-export { observable } from './observable';
+export { proxyState } from './observable';
