@@ -1,1 +1,1 @@
-export { initAppState } from './init-app-state';
+export { observable } from './observable';

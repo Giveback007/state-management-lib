@@ -1,27 +1,26 @@
-import { iterate, wait } from "@giveback007/util-lib";
+import { wait, iterate } from "@giveback007/util-lib";
+import { observableProxy } from "./proxy-handler";
 
 'use-strict';
 
-export class State<T extends ({}| any[])> {
-    get state() { return this._state; }
+export class ObservableEmitter<T extends ({} | any[])> {
+    
+    obj: T;
+    functs: ((obj: T) => any)[] = [];
 
-    private _state: T;
-    private functs: Array<(obj: T) => any> = [];
     private emitStarted = false;
     private emitIndex = -1;
     private lastIndexNeedUpdate = -1;
 
-    /** subscription method */
-    sub(funct: (obj: T) => any) {
-        const idx = this.functs.length;
-        this.functs[idx] = funct;
-        return { unsub: () => delete this.functs[idx] };
+    constructor(obj: T) {
+        this.obj = observableProxy(obj, this.startEmit);
     }
-    
-    /** Fires all of the subscriptions once all async code ran */
-    private async startEmit() {
+
+    /** Fires subscribed functions once all sync code runs */
+    startEmit = async () => {
         if (this.emitStarted)
             return this.lastIndexNeedUpdate = this.emitIndex;
+            
         this.emitIndex = -1;
         this.lastIndexNeedUpdate = -1;
         this.emitStarted = true;
@@ -37,7 +36,7 @@ export class State<T extends ({}| any[])> {
                 
             this.lastIndexNeedUpdate = -1
             iterate(nTimes).for((i) => {
-                this.functs[i](this._state);
+                this.functs[i](this.obj);
                 this.emitIndex = i;
             });
         } while (this.lastIndexNeedUpdate !== -1)
