@@ -17,7 +17,7 @@ export class ObservableEmitter<T extends ({} | any[])> {
     }
 
     /** Fires subscribed functions once all sync code runs */
-    startEmit = async () => {
+    async startEmit() {
         if (this.emitStarted)
             return this.lastIndexNeedUpdate = this.emitIndex;
             
