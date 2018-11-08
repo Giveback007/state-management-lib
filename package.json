@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/Giveback007/state-management-lib#readme",
   "dependencies": {
-    "@giveback007/util-lib": "^0.1.4"
+    "@giveback007/util-lib": "^0.2.0"
   },
   "devDependencies": {
     "typescript": "^3.1.6"
