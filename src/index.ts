@@ -1,1 +1,2 @@
-export { proxyState } from './proxy-state';
+export * from './@types';
+export * from './proxy-state';

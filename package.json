@@ -1,11 +1,11 @@
 {
   "name": "@giveback007/proxy-state",
-  "version": "1.2.0",
+  "version": "1.2.4",
   "description": "Easy state management for small applications using JS proxies",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "del dist /s /f /q && tsc && npm publish"
   },
   "files": [
     "/dist",
